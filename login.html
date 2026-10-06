@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Titik Parkir Kampus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+        }
+        /* Membesarkan ukuran font secara keseluruhan */
+        html {
+            font-size: 18px;
+        }
+        /* Semua teks diubah menjadi Hitam Pekat dengan bayangan putih/halus agar tetap terbaca di background gelap */
+        h1, h2, h3, p, label, button, span, .text-slate-700, .text-slate-800 {
+            font-weight: 900 !important;
+            color: #000000 !important;
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 0px 4px 8px rgba(0,0,0,0.4) !important;
+        }
+        input {
+            text-shadow: none !important;
+            font-weight: 700 !important;
+            color: #000000 !important;
+        }
+        /* Menerangkan tulisan placeholder */
+        input::placeholder {
+            color: #64748b !important;
+            font-weight: 600 !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+    
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <!-- Header / Logo Area -->
+        <div class="bg-emerald-500 p-8 text-center flex flex-col items-center">
+            <div class="h-16 w-16 bg-white rounded-xl flex items-center justify-center overflow-hidden shadow-md mb-4 p-1">
+                <img src="logo.png" alt="Logo Titik Parkir" class="w-full h-full object-cover rounded-lg">
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">TitikParkir</h1>
+            <p class="text-emerald-100 text-sm mt-1 font-medium">Portal Parkir Sivitas Akademika</p>
+        </div>
+
+        <!-- Form Area -->
+        <div class="p-8">
+            <form id="loginForm" class="flex flex-col gap-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="nim">NIM / NIP (ID Kampus)</label>
+                    <input type="text" id="nim" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors bg-slate-50 font-medium text-slate-800" placeholder="Masukkan ID Anda" required autocomplete="off">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="password">Kata Sandi</label>
+                    <input type="password" id="password" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors bg-slate-50 font-medium text-slate-800" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors shadow-md shadow-emerald-500/30 flex justify-center items-center gap-2">
+                    Masuk ke Sistem
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </form>
+            
+
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simpan status login di Session Storage
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            // Arahkan ke dashboard
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

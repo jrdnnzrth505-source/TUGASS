@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TitikParkir — Parkir Kampus Gratis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon" style="overflow: hidden; background: white; padding: 2px;">
+          <img src="logo.png" alt="Logo Titik Parkir" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+        </div>
+        <div class="brand-text">
+          <h1>TitikParkir</h1>
+          <span class="brand-tagline">Pemantauan & Alokasi Real-Time</span>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="live-pill" id="livePill" title="Koneksi sensor IoT real-time aktif">
+          <span class="live-dot pulse"></span>
+          <span class="live-text">REALTIME SYNC</span>
+        </div>
+
+        <div class="stat-pill">
+          <span class="stat-label">Tersedia:</span>
+          <strong id="availableLotsCount">--</strong>
+          <span class="stat-total">/ <span id="totalLotsCount">--</span> Lot</span>
+        </div>
+        
+        <button onclick="sessionStorage.clear(); window.location.href='login.html'" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border: 1px solid #E2E7EC;">Keluar</button>
+      </div>
+    </header>
+
+    <!-- Sub-bar: Kontrol Simulasi & Legenda -->
+    <div class="control-bar">
+      <div class="realtime-toggle-wrapper">
+        <label class="toggle-label" for="toggleSim">
+          <input type="checkbox" id="toggleSim" checked>
+          <span class="toggle-slider"></span>
+          <span class="toggle-text">Simulasi Sensor IoT Live</span>
+        </label>
+        <span class="sync-clock" id="syncClock">Deteksi aktif</span>
+      </div>
+
+      <div class="status-legend">
+        <span class="legend-item"><span class="dot dot-available"></span> Tersedia</span>
+        <span class="legend-item"><span class="dot dot-occupied"></span> Terisi</span>
+      </div>
+    </div>
+
+    <!-- Live Event Feed Banner -->
+    <div class="live-feed" id="liveFeed">
+      <span class="feed-icon">⚡</span>
+      <span class="feed-message" id="feedMessage">Sensor IoT terhubung. Memantau 12 titik parkir secara langsung...</span>
+      <span class="feed-time" id="feedTime">Baru saja</span>
+    </div>
+
+    <!-- Denah Interaktif Lot Parkir -->
+    <main class="parking-layout-container">
+      <div class="wayfinding wayfinding-in">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        <span>PINTU MASUK (DETEKTOR KAMERA & SENSOR GROUND)</span>
+      </div>
+
+      <div class="parking-grid" id="parkingGrid">
+        <!-- Lot cards di-render secara dinamis oleh app.js -->
+      </div>
+
+      <div class="wayfinding wayfinding-out">
+        <span>PINTU KELUAR & GATE OTOMATIS</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </main>
+
+    <!-- Footer -->
+
+  </div>
+
+  <!-- MODAL: Alokasi Parkir (Klik Slot Kosong) -->
+  <div class="modal-backdrop" id="modalPark" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Alokasi Langsung</span>
+          <h2 id="modalTitle">Parkir di Lot <span id="targetLotId">--</span></h2>
+        </div>
+        <button class="btn-close" id="btnClosePark" aria-label="Tutup modal">&times;</button>
+      </div>
+
+      <form id="formPark">
+        <div class="form-group" style="background: #ECFDF5; border: 1px dashed #10B981; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+          <span style="font-size: 1.5rem;">📷</span>
+          <p style="font-size: 0.8rem; color: #047857; margin-top: 0.5rem; font-weight: 600;">
+            Kamera IoT Gate akan memindai dan mencatat plat nomor kendaraan secara otomatis.
+          </p>
+        </div>
+
+        <div class="lot-summary-card">
+          <div class="summary-row">
+            <span>Status Sensor:</span>
+            <strong style="color: var(--color-primary)">Siap Ditempati</strong>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelPark">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btnConfirmPark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Konfirmasi Parkir
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Kosongkan Lot (Klik Slot Terisi) -->
+  <div class="modal-backdrop" id="modalOccupied" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-labelledby="modalOccTitle">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Lot Aktif</span>
+          <h2 id="modalOccTitle">Titik <span id="occLotId">--</span></h2>
+        </div>
+        <button class="btn-close" id="btnCloseOcc" aria-label="Tutup modal">&times;</button>
+      </div>
+
+      <div class="lot-summary-card">
+        <div class="summary-row">
+          <span>Plat Kendaraan:</span>
+          <strong id="occPlate">--</strong>
+        </div>
+        <div class="summary-row">
+          <span>Waktu Masuk:</span>
+          <strong id="occEntryTime">--:-- WIB</strong>
+        </div>
+        <div class="summary-row">
+          <span>Durasi Aktif:</span>
+          <strong id="occDuration" style="font-family: monospace; font-size: 1.1em; color: var(--color-primary)">00:00:00</strong>
+        </div>
+        <div class="summary-row">
+          <span>Status:</span>
+          <strong style="color: var(--status-occupied-tag)">Sedang Terisi</strong>
+        </div>
+        <div class="summary-row">
+          <span>Biaya:</span>
+          <strong>Gratis (Fasilitas Kampus)</strong>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btnCancelOcc" style="width: 100%;">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKASI -->
+  <div class="toast-container" id="toast">
+    <span id="toastMessage">Titik berhasil dipesan!</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

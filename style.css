@@ -1,0 +1,886 @@
+/* ──────────────────────────────────────────────────────────
+   TitikParkir — Muted Slate Blue + Black/White Theme (Real-Time Edition)
+   Karakteristik: Tenang, Minimalis, Tanpa Kontras Silau/Harsh
+────────────────────────────────────────────────────────── */
+
+:root {
+  /* Biru Lembut / Tidak Kontras (Muted Slate & Blue Grey) */
+  --color-primary: #526E7F;
+  --color-primary-hover: #435B6A;
+  --color-primary-subtle: #EBF1F5;
+  --color-primary-border: #9EB1BD;
+
+  /* Hitam / Charcoal & Abu-abu Gelap */
+  --color-dark: #1E252B;
+  --color-dark-surface: #273138;
+  --color-dark-muted: #5A6570;
+
+  /* Putih & Surface Netral */
+  --color-white: #FFFFFF;
+  --color-canvas: #F5F7FA;
+  --color-card-bg: #FFFFFF;
+  --color-border-subtle: #E2E7EC;
+
+  /* Status Warna (Hijau & Merah seperti prototipe awal) */
+  --status-available-bg: #ECFDF5; /* emerald-50 */
+  --status-available-border: #34D399; /* emerald-400 */
+  --status-available-tag: #10B981; /* emerald-500 */
+  --status-available-text: #047857; /* emerald-700 */
+
+  --status-occupied-bg: #FFF1F2; /* rose-50 */
+  --status-occupied-border: #FB7185; /* rose-400 */
+  --status-occupied-text: #BE123C; /* rose-700 */
+  --status-occupied-tag: #F43F5E; /* rose-500 */
+
+  --status-selected-border: #3A505D;
+  --status-selected-glow: rgba(82, 110, 127, 0.25);
+
+  /* Dimensi & Transisi */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-subtle: 0 1px 3px rgba(30, 37, 43, 0.06), 0 4px 12px rgba(30, 37, 43, 0.04);
+  --shadow-card: 0 4px 16px rgba(30, 37, 43, 0.08);
+  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-dark);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ──────────────── Header ──────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-white);
+  padding: 1.15rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-subtle);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-dark);
+}
+
+.brand-tagline {
+  font-size: 0.8rem;
+  color: var(--color-dark-muted);
+  display: block;
+}
+
+.header-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Live Badge */
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #EBF1F5;
+  border: 1px solid var(--color-primary-border);
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.live-dot.pulse {
+  animation: live-pulse 2s infinite;
+}
+
+@keyframes live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(82, 110, 127, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(82, 110, 127, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(82, 110, 127, 0);
+  }
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border-subtle);
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--color-dark);
+}
+
+.stat-pill strong {
+  font-weight: 700;
+  color: var(--color-dark);
+  font-size: 1.05rem;
+}
+
+.stat-total {
+  color: var(--color-dark-muted);
+  font-size: 0.825rem;
+}
+
+/* ──────────────── Control Bar & Controls ──────────────── */
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.zone-selector {
+  display: flex;
+  background: var(--color-white);
+  padding: 0.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-subtle);
+}
+
+.zone-btn {
+  border: none;
+  background: transparent;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-dark-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.zone-btn:hover {
+  color: var(--color-dark);
+}
+
+.zone-btn.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.zone-btn .badge {
+  font-size: 0.725rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.zone-btn.active .badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--color-white);
+}
+
+/* Realtime Simulator Toggle */
+.realtime-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-white);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-subtle);
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-label input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  width: 32px;
+  height: 18px;
+  background: #CBD5E1;
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 2px;
+  background: var(--color-white);
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.toggle-label input:checked + .toggle-slider {
+  background: var(--color-primary);
+}
+
+.toggle-label input:checked + .toggle-slider::before {
+  transform: translateX(14px);
+}
+
+.toggle-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.sync-clock {
+  font-size: 0.725rem;
+  color: var(--color-dark-muted);
+  border-left: 1px solid var(--color-border-subtle);
+  padding-left: 0.65rem;
+}
+
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: 0.825rem;
+  color: var(--color-dark-muted);
+  background: var(--color-white);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+
+.dot-available {
+  background: var(--status-available-tag);
+}
+
+.dot-occupied {
+  background: var(--status-occupied-tag);
+}
+
+/* ──────────────── Live Event Feed ──────────────── */
+.live-feed {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-subtle);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.825rem;
+  color: var(--color-dark);
+  box-shadow: var(--shadow-subtle);
+  transition: background 0.3s ease;
+}
+
+.live-feed.flash {
+  background: #EDF2F7;
+}
+
+.feed-icon {
+  font-size: 0.95rem;
+}
+
+.feed-message {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-time {
+  font-size: 0.725rem;
+  color: var(--color-dark-muted);
+}
+
+/* ──────────────── Main Interactive Layout ──────────────── */
+.parking-layout-container {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-subtle);
+  padding: 1.25rem;
+  position: relative;
+}
+
+.wayfinding {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-dark-muted);
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed var(--color-border-subtle);
+  margin-bottom: 1.15rem;
+}
+
+.wayfinding-out {
+  border-bottom: none;
+  border-top: 1px dashed var(--color-border-subtle);
+  margin-top: 1.15rem;
+  margin-bottom: 0;
+  justify-content: flex-end;
+}
+
+/* Denah Grid Lot Parkir */
+.parking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.95rem;
+}
+
+/* Slot Parkir Card */
+.lot-slot {
+  aspect-ratio: 1 / 1.35;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+  user-select: none;
+}
+
+/* Status: Kosong (Available) */
+.lot-slot.available {
+  background: var(--status-available-bg);
+  border: 2px dashed var(--status-available-border);
+  color: var(--status-available-text);
+}
+
+.lot-slot.available:hover {
+  transform: translateY(-2px);
+  border-style: solid;
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+/* Status: Terisi (Occupied) */
+.lot-slot.occupied {
+  background: var(--status-occupied-bg);
+  border: 2px solid var(--status-occupied-border);
+  color: var(--status-occupied-text);
+}
+
+.lot-slot.occupied:hover {
+  transform: translateY(-2px);
+  opacity: 0.96;
+  box-shadow: var(--shadow-card);
+}
+
+/* Animasi saat slot baru saja berubah secara real-time */
+.lot-slot.status-updated {
+  animation: slot-highlight 1.2s ease;
+}
+
+@keyframes slot-highlight {
+  0% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 4px var(--color-primary);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+/* Konten di dalam Lot Slot */
+.lot-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lot-number {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.lot-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.lot-slot.available .lot-tag {
+  background: var(--status-available-tag);
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.lot-slot.occupied .lot-tag {
+  background: var(--status-occupied-tag);
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(244, 63, 94, 0.3);
+}
+
+.lot-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  gap: 0.2rem;
+}
+
+.lot-slot.available .lot-center {
+  color: var(--color-primary-border);
+}
+
+.lot-slot.available:hover .lot-center {
+  color: var(--color-primary);
+}
+
+.lot-slot.occupied .lot-plate {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #FFF;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  color: var(--status-occupied-text);
+  border: 1px solid var(--status-occupied-border);
+  letter-spacing: 0.04em;
+}
+
+.lot-duration {
+  font-size: 0.675rem;
+  color: var(--status-occupied-text);
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.lot-bottom {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.lot-slot.available .lot-bottom {
+  color: var(--status-available-text);
+}
+
+.lot-slot.occupied .lot-bottom {
+  color: var(--status-occupied-text);
+}
+
+/* ──────────────── Footer ──────────────── */
+.app-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-dark-muted);
+  padding: 0.5rem;
+}
+
+/* ──────────────── Modals & Forms ──────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 22, 26, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.modal-backdrop.active .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.modal-eyebrow {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
+
+.modal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-dark-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.btn-close:hover {
+  color: var(--color-dark);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.form-group input {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border-subtle);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  background: #FAFBFC;
+  transition: var(--transition);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.form-hint {
+  font-size: 0.725rem;
+  color: var(--color-dark-muted);
+}
+
+.lot-summary-card {
+  background: var(--color-canvas);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-dark-muted);
+}
+
+.summary-row strong {
+  color: var(--color-dark);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+/* ──────────────── Buttons ──────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-border-subtle);
+  color: var(--color-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--color-canvas);
+}
+
+.btn-dark {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+.btn-dark:hover {
+  background: #0D1217;
+}
+
+/* ──────────────── Ticket Component ──────────────── */
+.ticket-preview {
+  background: #FAFBFC;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--color-border-subtle);
+  margin-bottom: 0.85rem;
+}
+
+.ticket-brand {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+.ticket-code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--color-dark-muted);
+}
+
+.ticket-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-dark-muted);
+}
+
+.ticket-row strong {
+  color: var(--color-dark);
+}
+
+.ticket-total {
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--color-border-subtle);
+  margin-top: 0.25rem;
+}
+
+.ticket-total strong {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+}
+
+/* ──────────────── Toast ──────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(50px);
+  background: var(--color-dark);
+  color: var(--color-white);
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2000;
+}
+
+.toast-container.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ──────────────── Responsiveness ──────────────── */
+@media (max-width: 600px) {
+  body {
+    padding: 0.75rem;
+  }
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+  .control-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .zone-selector {
+    width: 100%;
+  }
+  .zone-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .realtime-toggle-wrapper {
+    justify-content: space-between;
+  }
+  .status-legend {
+    justify-content: space-around;
+  }
+  .parking-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Tambahan Khusus Proyektor (Font Besar, Tebal & Berbayang)
+────────────────────────────────────────────────────────── */
+html {
+    font-size: 18px !important; /* Membesarkan semua skala font berbasis rem */
+}
+
+h1, h2, h3, h4, h5, h6, p, span, strong, label, button, .lot-number, .lot-tag, .stat-pill, .live-pill {
+    font-weight: 900 !important;
+    color: #000000 !important;
+    /* Outline putih agar font hitam tetap terlihat jelas walau di background gelap + bayangan */
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 0px 4px 8px rgba(0,0,0,0.4) !important;
+}
+
+/* Pengecualian agar input text tidak aneh */
+input {
+    text-shadow: none !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+}
+input::placeholder {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}

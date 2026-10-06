@@ -869,18 +869,22 @@ html {
 
 h1, h2, h3, h4, h5, h6, p, span, strong, label, button, .lot-number, .lot-tag, .stat-pill, .live-pill {
     font-weight: 900 !important;
-    color: #000000 !important;
-    /* Outline putih agar font hitam tetap terlihat jelas walau di background gelap + bayangan */
-    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 0px 4px 8px rgba(0,0,0,0.4) !important;
+    color: #ffffff !important;
+    /* Stroke 2px hitam pekat ke semua sisi + drop shadow */
+    text-shadow: 
+        2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 
+        0px 2px 0 #000, 0px -2px 0 #000, 2px 0px 0 #000, -2px 0px 0 #000,
+        1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        3px 4px 6px rgba(0,0,0,0.8) !important;
 }
 
-/* Pengecualian agar input text tidak aneh */
-input {
-    text-shadow: none !important;
-    font-weight: 700 !important;
-    color: #000000 !important;
-}
-input::placeholder {
-    color: #64748b !important;
-    font-weight: 600 !important;
+/* Terapkan juga ke teks di dalam kolom input dan placeholder ("Masukkan ID Anda" / Kata sandi) agar tidak gelap */
+input, input::placeholder {
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    text-shadow: 
+        2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 
+        0px 2px 0 #000, 0px -2px 0 #000, 2px 0px 0 #000, -2px 0px 0 #000,
+        1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        3px 4px 6px rgba(0,0,0,0.8) !important;
 }
